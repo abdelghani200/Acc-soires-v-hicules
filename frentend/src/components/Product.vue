@@ -7,37 +7,14 @@
                         <h1 class="fashion_taital">Voitures Accessories</h1>
                         <div class="fashion_section_2">
                             <div class="row">
-                                <div class="col-lg-4 col-sm-4">
+                                <div class="col-lg-4 col-sm-4" v-for="produit in produits.slice(6, 9)" :key="produit.id">
                                     <div class="box_main">
-                                        <h4 class="shirt_text">Jumkas</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
+                                        <h4 class="shirt_text">{{ produit.name }}</h4>
+                                        <p class="price_text">Start Price <span style="color: #262626;">$ {{ produit.price }}</span></p>
                                         <div class="jewellery_img"><img src="../../public/images/v_1.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now <span style="color: aqua;"><i class="fa-solid fa-cart-shopping"></i></span></a></div>
-                                            <div class="seemore_bt"><a href="#">Sow<i class="fa-sharp fa-regular fa-eye"></i></a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Necklaces</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_2.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Kangans</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_3.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
+                                        <div class="btn_main" style="justify-content: space-between;">
+                                            <div class="buy_bt"><a href="#">Buy Now<span style="color: aqua;"></span></a></div>
+                                            <div class="seemore_bt"><RouterLink to="/details" class="">See More</RouterLink></div>
                                         </div>
                                     </div>
                                 </div>
@@ -50,32 +27,10 @@
                         <h1 class="fashion_taital">Motos Accessories</h1>
                         <div class="fashion_section_2">
                             <div class="row">
-                                <div class="col-lg-4 col-sm-4">
+                                <div class="col-lg-4 col-sm-4" v-for="produit in produits.slice(6, 9)" :key="produit.id">
                                     <div class="box_main">
-                                        <h4 class="shirt_text">Jumkas</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_1.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Necklaces</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_2.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Kangans</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
+                                        <h4 class="shirt_text">{{ produit.name }}</h4>
+                                        <p class="price_text">Start Price <span style="color: #262626;">$ {{ produit.price }}</span></p>
                                         <div class="jewellery_img"><img src="../../public/images/v_1.jpg"></div>
                                         <div class="btn_main">
                                             <div class="buy_bt"><a href="#">Buy Now</a></div>
@@ -92,33 +47,11 @@
                         <h1 class="fashion_taital">Voitures Accessories</h1>
                         <div class="fashion_section_2">
                             <div class="row">
-                                <div class="col-lg-4 col-sm-4">
+                                <div class="col-lg-4 col-sm-4" v-for="produit in produits.slice(6, 9)" :key="produit.id">
                                     <div class="box_main">
-                                        <h4 class="shirt_text">Jumkas</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
+                                        <h4 class="shirt_text">{{ produit.name }}</h4>
+                                        <p class="price_text">Start Price <span style="color: #262626;">$ {{ produit.price }}</span></p>
                                         <div class="jewellery_img"><img src="../../public/images/v_3.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Necklaces</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_1.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">Kangans</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ 100</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_2.jpg"></div>
                                         <div class="btn_main">
                                             <div class="buy_bt"><a href="#">Buy Now</a></div>
                                             <div class="seemore_bt"><a href="#">See More</a></div>
@@ -142,3 +75,52 @@
         </div>
     </div>
 </template>
+
+
+<script>
+
+
+
+import axios from 'axios';
+
+export default {
+
+    data() {
+
+        return {
+
+            produits: []
+
+        }
+
+    },
+
+    methods: {
+
+        getProduits() {
+
+            axios.get('api/products')
+
+                .then(response => {
+
+                    this.produits = response.data.data;
+
+                })
+
+                .catch(error => {
+
+                    console.log(error);
+
+                });
+
+        }
+
+    },
+    created() {
+        this.getProduits();
+    }
+}
+
+
+
+</script>
