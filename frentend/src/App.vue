@@ -1,15 +1,20 @@
+<template>
+  <div>
+    <Navbar />
+    <!-- <router-view /> -->
+   <!-- <Dashboard  />  -->
+      <!-- v-if="isConnected" -->
+    <Footer />
+    <add/>
+  </div>
+</template>
+
 <script>
-
-import { RouterLink } from 'vue-router';
-
 import Navbar from './components/Navbar.vue'
-
 import Footer from './components/Footer.vue'
-
-import Product from './components/Product.vue'
-
-import Dashboard from './components/Admin/Dashboard.vue';
-
+import Product from './components/Product.vue';
+import add from './components/Admin/produits/add.vue';
+import Dashboard from './views/Dashboard.vue';
 
 export default {
   name: 'App',
@@ -18,19 +23,10 @@ export default {
     Footer,
     Product,
     Dashboard
-  }
 }
-
+}
 </script>
 
-<template>
-  <!-- <navbar></navbar> -->
-  <!-- <Product/> -->
-  <Dashboard/>
-  <!-- <Footer/> -->
-  
-</template>
-
 <style>
-
+/* styles pour le composant App.vue */
 </style>
