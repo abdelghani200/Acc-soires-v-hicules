@@ -42,14 +42,14 @@
                     <div class="containt_main">
                         <div id="mySidenav" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                            <a href="">Home</a>
-                            <router-link to="/ProduitsVue">Produits</router-link>
+                            <RouterLink to=" ">Home</RouterLink>
+                            <RouterLink to="/ProduitsVue">Produits</RouterLink>
                             <a href="">Plus Vendus</a>
                             <a href="">Contacts</a>
-                            <a href="">Blog</a>
+                            <RouterLink to="/BlogVue">Blog</RouterLink>
                         </div>
                         <span class="toggle_icon" onclick="openNav()" style="width:54px;height: 54px;"><img
-                                class="padding_10" src="images/toggle.webp"></span>
+                                class="padding_10" src="/images/toggle.webp"></span>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Category
@@ -82,36 +82,26 @@
                                 <ul>
                                     <li>
                                         <RouterLink to="/Cart" style="color: black;" @click.prevent="showCartModal">
-                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i><sup>{{ cartItems.length
+                                            }}</sup>
                                             <span class="padding_10">Cart</span>
                                         </RouterLink>
-                                        <!-- <a href="" >cart</a> -->
                                     </li>
                                     <li>
-                                        <RouterLink to="/Login" style="color: black;" @click.prevent="showLoginModal">
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <span class="padding_10">Login</span>
-                                        </RouterLink>
-                                        <button v-if="isLoggedIn" @click="logout">
-                                            <i class="fa fa-user" aria-hidden="true"></i>
-                                            <span class="padding_10">Logout</span>
-                                        </button>
-                                        <span aria-hidden="true">&times;</span>
+                                        <template v-if="isAuthenticated == true">
+                                            <button @click.prevent="logout" style="background-color: white;">
+                                                <i class="fa-solid fa-right-from-bracket"></i>
+                                                <span class="padding_10">Logout</span>
+                                            </button>
+                                        </template>
+                                        <template v-else>
+                                            <RouterLink to="/Login" style="color: black;" @click.prevent="showLoginModal">
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                <span class="padding_10">Login</span>
+                                            </RouterLink>
+                                        </template>
                                     </li>
                                 </ul>
-                                <div v-if="showModal" class="modal">
-                                    <div class="modal-content">
-                                        <span class="close" @click="hideLoginModal">&times;</span>
-                                        <Login />
-                                    </div>
-                                </div>
-
-                                <div v-if="show" class="modal">
-                                    <div class="modal-content">
-                                        <span class="close" @click="hideCartModal">&times;</span>
-                                        <Cart />
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -120,127 +110,8 @@
             <!-- header section end -->
         </div>
 
-        <div class="banner_section layout_padding">
-            <div class="container" style="padding-top: 160px;">
-                <div id="my_slider" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-                                    <div class="buynow_bt"><a href="#">Buy Now</a></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <h1 class="banner_taital">Shop now <br>Yand start saving today!</h1>
-                                    <div class="buynow_bt"><a href="#">Find out more</a></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <h1 class="banner_taital">Welcome <br>To in Accesoires Véhicules</h1>
-                                    <div class="buynow_bt"><a href="#">Buy Now</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#my_slider" role="button" data-slide="prev">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#my_slider" role="button" data-slide="next">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
 
-    </div>
-    <!-- banner bg main end -->
-    <div class="jewellery_section">
-        <div id="jewellery_main_slider" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container">
-                        <h1 class="fashion_taital">Voitures Accessories</h1>
-                        <div class="fashion_section_2">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-4" v-for="produit in products.slice(6, 9)" :key="produit.id">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">{{ produit.name }}</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ {{ produit.price
-                                        }}</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_1.jpg"></div>
-                                        <div class="btn_main" style="justify-content: space-between;">
-                                            <div class="buy_bt"><a href="#">Buy Now<span style="color: aqua;"></span></a>
-                                            </div>
-                                            <div class="seemore_bt">
-                                                <RouterLink to="/details" class="">See More</RouterLink>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <h1 class="fashion_taital">Motos Accessories</h1>
-                        <div class="fashion_section_2">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-4" v-for="produit in products.slice(6, 9)" :key="produit.id">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">{{ produit.name }}</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ {{ produit.price
-                                        }}</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_1.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <h1 class="fashion_taital">Voitures Accessories</h1>
-                        <div class="fashion_section_2">
-                            <div class="row">
-                                <div class="col-lg-4 col-sm-4" v-for="produit in products.slice(6, 9)" :key="produit.id">
-                                    <div class="box_main">
-                                        <h4 class="shirt_text">{{ produit.name }}</h4>
-                                        <p class="price_text">Start Price <span style="color: #262626;">$ {{ produit.price
-                                        }}</span></p>
-                                        <div class="jewellery_img"><img src="../../public/images/v_3.jpg"></div>
-                                        <div class="btn_main">
-                                            <div class="buy_bt"><a href="#">Buy Now</a></div>
-                                            <div class="seemore_bt"><a href="#">See More</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="" role="button" data-slide="prev">
-                <i class="fa fa-angle-left"></i>
-            </a>
-            <a class="carousel-control-next" href="" role="button" data-slide="next">
-                <i class="fa fa-angle-right"></i>
-            </a>
-            <div class="loader_main">
-                <div class="loader"></div>
-            </div>
-        </div>
+
     </div>
 </template>
 
@@ -248,6 +119,7 @@
 
 
 <script>
+
 
 import axios from 'axios'
 
@@ -261,15 +133,18 @@ export default {
     name: 'Navbar',
     components: {
         Login,
-        Cart
+        Cart,
+        RouterLink
     },
     data() {
         return {
             categories: [],
             produits: [],
             products: [],
+            cartItems: [],
             showModal: false,
-            show: false
+            show: false,
+            isAuthenticated: localStorage.getItem("isLoggedIn") === "true"
         }
     },
     methods: {
@@ -295,12 +170,14 @@ export default {
                 })
         },
         getProduits(categorieId) {
+
             axios
                 .get(`api/categories/${categorieId}/products`)
                 .then(response => {
-                    this.produits = response.data.data
+                    this.produits = response.data
+                    console.log(response);
                     console.log(this.produits);
-                    console.log(this.categorieId);
+                    console.log(categorieId);
                 })
                 .catch(error => {
                     alert('hhh wlh ladkhalti');
@@ -313,12 +190,32 @@ export default {
                     this.products = response.data.data
                     console.log(this.products);
                 })
+        },
+        getNbCarts() {
+            axios
+                .get('api/cart', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                    }
+                })
+                .then(response => {
+                    this.cartItems = response.data.data
+                    console.log(this.cartItems);
+                })
+        },
+        logout() {
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('isLoggedIn')
+            localStorage.removeItem('user_id')
+            this.isAuthenticated = false
+            this.$router.push('/Login')
         }
 
     },
     created() {
         this.getCategories()
         this.getProducts()
+        this.getNbCarts()
     }
 }
 </script>
