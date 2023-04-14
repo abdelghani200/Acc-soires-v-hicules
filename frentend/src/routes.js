@@ -4,7 +4,7 @@ import Login from './components/Login.vue';
 
 import Register from './components/Register.vue';
 
-import Dashboard  from './views/Dashboard.vue';
+import Dashboard from './views/Dashboard.vue';
 
 import Cart from './components/Cart.vue';
 
@@ -24,10 +24,24 @@ import Statiques from './components/Admin/Statiques.vue';
 
 import ProduitsVue from './components/ProduitsVue.vue';
 
+import ClientsVue from './views/ClientsVue.vue';
 
+import Home from './components/Home.vue';
+
+import update from './components/Admin/produits/update.vue';
+
+import UpdateCategorie from './components/Admin/categories/UpdateCategorie.vue';
+
+import add from './components/Admin/produits/add.vue';
+
+import BlogVue from './views/BlogVue.vue';
 
 
 const routes = [
+    {
+        path: '',
+        component: Home,
+    },
     {
         path: '/Login',
         component: Login,
@@ -37,7 +51,7 @@ const routes = [
         component: Register,
     },
     {
-        path: '/Dashboard',
+        path: '/dashboard',
         component: Dashboard,
     },
     {
@@ -53,7 +67,7 @@ const routes = [
         component: order,
     },
     {
-        path:'/produits',
+        path: '/produits',
         component: produits,
     },
     {
@@ -61,8 +75,9 @@ const routes = [
         component: Product,
     },
     {
-        path: '/details',
-        component: DetailProduct
+        path: '/details/:id',
+        component: DetailProduct,
+        name: 'DetailProduct', 
     },
     {
         path: '/DisplayCategories',
@@ -75,6 +90,33 @@ const routes = [
     {
         path: '/ProduitsVue',
         component: ProduitsVue
+    },
+    {
+        path: '/BlogVue',
+        component: BlogVue,
+    },
+    {
+        path: '/clients',
+        component: ClientsVue
+    },
+    { path: '/updateProduct/:id',
+     component: update,
+     name: 'updateProduct' ,
+     props: route => ({ id: route.params.id }),
+    },
+    {
+        path: '/UpdateCategorie/:id',
+        component: UpdateCategorie,
+        name: 'UpdateCategorie',
+        props: route => ({ id: route.params.id }),
+    },
+    {
+        path: '/add',
+        component: add,
+    },
+    { 
+        path: '/addCategorie',
+        component: AddCategorie,
     }
 
 ]
