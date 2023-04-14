@@ -16,10 +16,10 @@
             </div>
             <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input v-model="price" type="text" class="form-control form-control-user" placeholder="Price Product">
+                    <input v-model="price" type="number" class="form-control form-control-user" placeholder="Price Product">
                 </div>
                 <div class="col-sm-6">
-                    <input v-model="old_price" type="text" class="form-control form-control-user"
+                    <input v-model="old_price" type="number" class="form-control form-control-user"
                         placeholder="Old Price Product">
                 </div>
             </div>
@@ -36,9 +36,15 @@
                         id="exampleRepeatPassword" placeholder="Code bare">
                 </div>
             </div>
-            <!-- <div class="form-group">
-                <input v-model="productImage" type="file" class="form-control form-control-user" placeholder="Image">
-            </div> -->
+            <div class="form-group row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input v-model="discount" type="number" class="form-control form-control-user"
+                        id="exampleRepeatPassword" placeholder="discount">
+                </div>
+                <div class="col-sm-6">
+                    <input type="file" class="form-control form-control-user" placeholder="Image" @change="onFileSelected">
+                </div>
+            </div>
             <a href="#" class="btn btn-primary" @click.prevent="addProduct">Ajouter un produit</a>
         </form>
     </div>
@@ -47,6 +53,8 @@
 <script>
 
 import axios from 'axios'
+import Swal from 'sweetalert2';
+
 
 export default {
     data() {
@@ -59,48 +67,49 @@ export default {
             description: '',
             stock: '',
             code_bare: '',
-            // productImage: ''
+            discount: '',
+            image: null
         }
     },
     methods: {
         addProduct() {
-            if (this.name === '' || this.categorie === '' || this.price === '' || this.stock === '') {
-                alert('Please fill all required fields')
-                return
-            }
+            let formData = new FormData();
+            formData.append('name', this.name);
+            formData.append('categorie_id', this.categorie.id);
+            formData.append('price', this.price);
+            formData.append('old_price', this.old_price);
+            formData.append('description', this.description);
+            formData.append('stock', this.stock);
+            formData.append('code_bare', this.code_bare);
+            formData.append('discount', this.discount);
+            formData.append('image', this.image);
 
-            const productData = new FormData()
-            productData.append('name', this.name)
-            productData.append('category', this.categorie)
-            productData.append('price', this.price)
-            productData.append('oldPrice', this.old_price)
-            productData.append('description', this.description)
-            productData.append('qty', this.stock)
-            productData.append('code', this.code_bare)
-            // productData.append('image', this.productImage)
-
-            axios.post('api/products', productData)
+            axios.post('api/products', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
                 .then(response => {
                     console.log(response)
-                    // Show success message and clear form
-                    alert('Product added successfully')
-                    this.clearForm()
+                    this.$router.push('/produits')
+
+                    // display success message using switch alert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Created!',
+                        text: 'Your product has been created successfully.',
+                        timer: 4000,
+                        showConfirmButton: false
+                    })
                 })
                 .catch(error => {
-                    console.log(error)
-                    // Show error message
-                    alert('Error adding product')
+                    console.log(error.response.data);
                 })
         },
-        clearForm() {
-            this.name = ''
-            this.categorie = ''
-            this.price = ''
-            this.old_price = ''
-            this.description = ''
-            this.stock = ''
-            this.code_bare = ''
-            // this.productImage = ''
+
+        onFileSelected(event) {
+            this.image = event.target.files[0]
+            console.log(this.image);
         },
         getCategories() {
             axios.get('/api/categories')
