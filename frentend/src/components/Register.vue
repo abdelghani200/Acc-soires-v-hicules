@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="margin-top: 120px;">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-12 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg my-5">
@@ -17,9 +17,7 @@
                                         <div class="form-group row">
                                             <div class="col-sm-6 mb-3 mb-sm-0">
                                                 <input type="text" class="form-control form-control-user"
-                                                    placeholder="First Name" v-model="firstName" />
-                                                <span v-if="!firstName" class="text-danger">Please enter your first
-                                                    name</span>
+                                                    placeholder="First Name" v-model="name" />
                                             </div>
                                             <div class="col-sm-6">
                                                 <input type="text" class="form-control form-control-user"
@@ -32,25 +30,31 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="password" class="form-control form-control-user"
-                                                    id="exampleInputPassword" placeholder="Password" v-model="password" />
+                                                <input type="text" class="form-control form-control-user"
+                                                    placeholder="Your ville" v-model="ville" />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control form-control-user"
+                                                    placeholder="Your Adress" v-model="address" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                placeholder="Your Telephone" v-model="numTele" />
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="password" class="form-control form-control-user" id="password"
+                                                    placeholder="Password" v-model="password" />
                                             </div>
                                             <div class="col-sm-6">
                                                 <input type="password" class="form-control form-control-user"
-                                                    id="exampleRepeatPassword" placeholder="Repeat Password"
-                                                    v-model="repeatPassword" />
+                                                    id="password_confirmation" placeholder="Repeat Password"
+                                                    v-model="password_confirmation" />
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Register Account
-                                        </button>
-                                        <hr />
-                                        <button class="btn btn-google btn-user btn-block">
-                                            <i class="fab fa-google fa-fw"></i> Register with Google
-                                        </button>
-                                        <button class="btn btn-facebook btn-user btn-block">
-                                            <i class="fab fa-facebook-f fa-fw"></i> Register with
-                                            Facebook
                                         </button>
                                     </form>
                                     <hr />
@@ -71,50 +75,47 @@
     </div>
 </template>
   
+
+
 <script>
 
+import axios from 'axios';
 
 
 export default {
     data() {
         return {
-            firstName: "",
+            name: "",
             lastName: "",
             email: "",
+            ville: "",
+            address: "",
+            numTele: "",
             password: "",
-            repeatPassword: "",
+            password_confirmation: "",
         };
     },
 
     methods: {
         register() {
-            // Perform form validation
-            if (this.firstName === "") {
-                alert("Please enter your first name.");
-                return;
-            }
-            if (this.lastName === "") {
-                alert("Please enter your last name.");
-                return;
-            }
-            if (this.email === "") {
-                alert("Please enter your email address.");
-                return;
-            }
-            if (this.password === "") {
-                alert("Please enter a password.");
-                return;
-            }
-            if (this.repeatPassword === "") {
-                alert("Please repeat your password.");
-                return;
-            }
-            if (this.password !== this.repeatPassword) {
-                alert("Passwords do not match.");
-                return;
-            }
-            // Perform registration logic
-            alert("Registration successful!");
+            axios.post('api/register', {
+                name: this.name,
+                lastName: this.lastName,
+                email: this.email,
+                ville: this.ville,
+                address: this.address,
+                numTele: this.numTele,
+                password: this.password,
+                password_confirmation: this.password_confirmation,
+            }).then(response => {
+                console.log(response);
+                // rediriger l'utilisateur vers la page de connexion
+                this.$router.push('/login');
+            }).catch(error => {
+                // afficher un message d'erreur si la création de compte a échoué
+                console.log(error);
+                alert('Account creation failed. Please try again later.');
+            });
         },
     },
 };
