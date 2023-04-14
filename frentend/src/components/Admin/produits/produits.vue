@@ -8,10 +8,10 @@
                         <tr>
                             <th> # </th>
                             <th> Name </th>
-                            <!-- <th> Image </th> -->
+                            <th> Categorie </th>
+                            <th> Image </th>
                             <th> Price </th>
                             <th> Old price </th>
-                            <!-- <th> Categorie </th> -->
                             <th> Description </th>
                             <th> Code bare </th>
                             <th> Stock </th>
@@ -22,9 +22,11 @@
                         <tr v-for="produit in paginatedProduits" :key="produit.id">
                             <td> {{ produit.id }} </td>
                             <td> {{ produit.name }} </td>
-                            <!-- <td> -->
-                            <!-- <img src="{{produit.image}}" class="img-responsive" alt=""> -->
-                            <!-- </td> -->
+                            <td>{{ produit.category }}</td>
+                            <td>
+                                <!-- <img class="rounded-circle" style="width: 50px; height: 50px;" :src="produit.image" /> -->
+                                <img :src="produit.image" alt="{{ produit.image }}">
+                            </td>
                             <td> {{ produit.price }} </td>
                             <td> {{ produit.old_price }} </td>
                             <td>{{ produit.description.slice(0, 15) + '...' }}</td>
@@ -60,7 +62,7 @@
 <script>
 
 import axios from 'axios';
-
+import Swal from 'sweetalert2';
 // import VuePaginator from 'vuejs-paginator';
 
 
@@ -107,13 +109,22 @@ export default {
 
         deleteProduct(productId) {
             axios
-                .delete(`/api/products/${productId}`,{ 
-                
+                .delete(`/api/products/${productId}`, {
+
                 })
                 .then(response => {
                     console.log(response);
                     console.log('Product deleted successfully');
                     this.getProducts();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Product delete successfully',
+                        text: 'Your product has been deleted successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+
+                    })
                 })
                 .catch(error => {
                     console.log(error);
@@ -121,10 +132,12 @@ export default {
         },
 
         updateProduct(productId) {
+            this.$router.push({ name: 'updateProduct', params: { id: productId } });
             axios.
                 put(`/api/products/${productId}`)
                 .then(response => {
                     console.log(response);
+                    console.log('rrer');
                     this.getProducts();
                 })
                 .catch(error => {
