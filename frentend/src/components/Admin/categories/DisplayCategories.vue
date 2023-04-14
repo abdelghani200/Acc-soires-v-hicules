@@ -18,7 +18,8 @@
                             <td> {{ categorie.id }} </td>
                             <td> {{ categorie.name }} </td>
                             <td>
-                                <img v-bind:src=" categorie.image ">
+                                <!-- <img v-bind:src=" categorie.image "> -->
+                                <img class="rounded-circle" style="width: 50px; height: 50px;" :src="categorie.image" />
                                 <!-- <img :src="'/storage/images/categories/' + categorie.image" alt="{{ categorie.name }}"> -->
                             </td>
                             <td> {{ categorie.description }} </td>
@@ -61,25 +62,32 @@ export default {
                     console.log(error);
                 });
         },
-        deleteCategorie(CategorieId) {
-            axios
-                .delete(`/api/categories/${CategorieId}`)
-                .then(response => {
-                    console.log(response);
-                    console.log('Product deleted successfully');
-                    this.getProducts();
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        deleteCategorie(categorieId) {
+            // Vérifier si la catégorie est autorisée à être supprimée
+            if (categorieId > 3) {
+                axios
+                    .delete(`api/categories/${categorieId}`)
+                    .then(response => {
+                        console.log(response);
+                        console.log('Categorie deleted successfully');
+                        this.getCategories();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            } else {
+                // La catégorie ne peut pas être supprimée
+                alert("Cette catégorie ne peut pas être supprimée !");
+            }
         },
 
         updateCategorie(CategorieId) {
+            this.$router.push({ name: 'UpdateCategorie', params: { id: CategorieId } });
             axios.
                 put(`/api/products/${CategorieId}`)
                 .then(response => {
                     console.log(response);
-                    this.getProducts();
+                    this.getCategories();
                 })
                 .catch(error => {
                     console.log(error);
