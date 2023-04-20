@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-12 grid-margin stretch-card ">
+  <div class="col-lg-12 grid-margin stretch-card">
     <h4 class="card-title"> <span></span> Add_Products</h4>
 
     <form class="user" @submit.prevent="addCategory">
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="form-group">
-        <input type="file" class="form-control form-control-user" @change="onFileSelected" placeholder="Image">
+        <input type="file" class="form-control form-control-user" @change="uploadimage" placeholder="Image">
       </div>
       <div class="form-group">
         <div class="col-sm-6 mb-3 mb-sm-0">
@@ -37,7 +37,7 @@ export default {
     return {
       name: '',
       description: '',
-      file: null,
+      image: null,
     }
   },
   methods: {
@@ -46,28 +46,44 @@ export default {
       const formData = new FormData();
       formData.append('name', this.name);
       formData.append('description', this.description);
-      formData.append('image', this.file);
+      formData.append('image', this.image);
 
       // send data to server using axios
       axios.post('/api/categories', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization':'Bearer '+localStorage.getItem('access_token')  
+          'Authorization': 'Bearer ' + localStorage.getItem('access_token')
         }
       })
         .then(response => {
           console.log(response.data)
           // handle success response
-         
+          
+          this.$router.push('/DisplayCategories')
+          
+
         })
         .catch(error => {
           console.error(error)
           // handle error response
         })
     },
-    onFileSelected(event) {
-      this.file = event.target.files[0];
-    },
+    uploadimage(event) {
+      this.loading = true;
+      let file = event.target.files[0];
+      let formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'tduoyf0g');
+      axios.post('https://api.cloudinary.com/v1_1/dnlsbze2k/upload', formData, {
+        withCredentials: false,
+
+      })
+        .then(response => {
+          // this.loading = false;
+          this.image = response.data.secure_url;
+          console.log(this.image)
+        })
+    }
   }
 }
 </script>
