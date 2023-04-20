@@ -25,11 +25,21 @@ export default {
                 console.log(response.data);
                 const { token, redirect_url } = response.data;
                 const userId = response.data.data.user_id;
+                const role   = response.data.data.role
+                console.log(role);
                 console.log(userId);
                 localStorage.setItem("isLoggedIn", true);
                 localStorage.setItem('access_token', token);
                 localStorage.setItem('user_id', userId);
-                window.location.href = redirect_url;
+                if(role == 'admin'){
+                    localStorage.setItem("RoleUser", 'Admin');
+                }
+                if(role == 'user'){
+                    localStorage.setItem("RoleUser", 'User');
+                }
+
+                this.$router.push(redirect_url);
+                // window.location.href = redirect_url;
 
 
             } catch (error) {
