@@ -24,8 +24,7 @@
                             <td> {{ produit.name }} </td>
                             <td>{{ produit.category }}</td>
                             <td>
-                                <!-- <img class="rounded-circle" style="width: 50px; height: 50px;" :src="produit.image" /> -->
-                                <img :src="produit.image" alt="{{ produit.image }}">
+                                <img class="rounded-circle" style="width: 50px; height: 50px;" :src="produit.image" />
                             </td>
                             <td> {{ produit.price }} </td>
                             <td> {{ produit.old_price }} </td>
