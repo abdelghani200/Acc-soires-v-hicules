@@ -42,11 +42,11 @@
                     <div class="containt_main">
                         <div id="mySidenav" class="sidenav">
                             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                            <RouterLink to=" ">Home</RouterLink>
-                            <RouterLink to="/ProduitsVue">Produits</RouterLink>
-                            <a href="">Plus Vendus</a>
-                            <a href="">Contacts</a>
-                            <RouterLink to="/BlogVue">Blog</RouterLink>
+                            <RouterLink to="" @click="toggleMenu()">Home</RouterLink>
+                            <RouterLink to="/ProduitsVue" @click="toggleMenu()">Produits</RouterLink>
+                            <RouterLink to="/plusvendus" @click="toggleMenu()">Plus Vendus</RouterLink>
+                            <RouterLink to="/Contact" @click="toggleMenu()">Contacts</RouterLink>
+                            <RouterLink to="/BlogVue" @click="toggleMenu()">Blog</RouterLink>
                         </div>
                         <span class="toggle_icon" onclick="openNav()" style="width:54px;height: 54px;"><img
                                 class="padding_10" src="/images/toggle.webp"></span>
@@ -60,28 +60,34 @@
                             </div>
                         </div>
                         <div class="main">
-                            <!-- Another variation with a button -->
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search this blog">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="button"
-                                        style="background-color: #f26522; border-color:#f26522;z-index: -1;">
-                                        <i class="fa fa-search"></i>
-                                    </button>
+                            
+                            <!-- <form @submit.prevent="rechercher"> -->
+                                <form @submit.prevent="rechercher();">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" v-model="rechercheProduit"
+                                        placeholder="Search this product or by price">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-secondary" type="submit"
+                                            style="background-color: #f26522; border-color:#f26522;z-index: -1;">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
+
+                            <!-- </div> -->
                         </div>
                         <div class="header_box">
-                            <div class="lang_box ">
-                                <a href="#" title="Language" class="nav-link" data-toggle="dropdown" aria-expanded="true">
-                                    <i class="fa-solid fa-location-dot" aria-hidden="true"
-                                        style="font-size: 18px;"></i><span class="padding_10">Position</span>
+                            <div class="lang_box position">
+                                <a href="#" title="Language" class="nav-link">
+                                    <i class="fa-solid fa-location-dot" style="font-size: 18px;"></i><span
+                                        class="padding_10">Position</span>
                                 </a>
                             </div>
                             <div class="login_menu">
                                 <ul>
                                     <li>
-                                        <RouterLink to="/Cart" style="color: black;" @click.prevent="showCartModal">
+                                        <RouterLink to="/Cart" style="color: black;">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i><sup>{{ cartItems.length
                                             }}</sup>
                                             <span class="padding_10">Cart</span>
@@ -109,10 +115,11 @@
             </div>
             <!-- header section end -->
         </div>
-
-
-
+        
+        
+        
     </div>
+    <!-- <RouterView /> -->
 </template>
 
 
@@ -144,23 +151,15 @@ export default {
             cartItems: [],
             showModal: false,
             show: false,
-            isAuthenticated: localStorage.getItem("isLoggedIn") === "true"
+            isAuthenticated: localStorage.getItem("isLoggedIn") === "true",
+            rechercheProduit: ""
         }
     },
     methods: {
-        showLoginModal() {
-            this.showModal = !this.showModal
+        
+        toggleMenu() {
+            document.getElementById("mySidenav").style.width = "0px";
         },
-        hideLoginModal() {
-            this.showModal = false
-        },
-        showCartModal() {
-            this.show = true
-        },
-        hideCartModal() {
-            this.show = false
-        },
-
         getCategories() {
             axios
                 .get('api/categories')
@@ -207,11 +206,33 @@ export default {
             localStorage.removeItem('access_token')
             localStorage.removeItem('isLoggedIn')
             localStorage.removeItem('user_id')
+            localStorage.removeItem('RoleUser')
             this.isAuthenticated = false
             this.$router.push('/Login')
+        },
+        rechercher() {
+            let url = "api/search/" + encodeURIComponent(this.rechercheProduit) + "/";
+            if (this.recherchePrix) {
+                url += encodeURIComponent(this.recherchePrix);
+            }
+            axios.get(url)
+                .then(response => {
+                    if (!response.status === 200) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.data;
+                })
+                .then(resultats => {
+                    this.$emit("resultats-recherche", resultats);
+                    console.log(resultats);
+                })
+
+                .catch(error => console.error('Error:', error));
         }
 
+
     },
+
     created() {
         this.getCategories()
         this.getProducts()
@@ -219,4 +240,5 @@ export default {
     }
 }
 </script>
+
 
