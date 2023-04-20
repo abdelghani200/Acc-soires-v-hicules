@@ -93,6 +93,7 @@ export default {
             numTele: "",
             password: "",
             password_confirmation: "",
+            messageError:""
         };
     },
 
@@ -114,7 +115,9 @@ export default {
             }).catch(error => {
                 // afficher un message d'erreur si la création de compte a échoué
                 console.log(error);
+                // messageError = swite('Account creation failed. Please try again later.');
                 alert('Account creation failed. Please try again later.');
+                
             });
         },
     },

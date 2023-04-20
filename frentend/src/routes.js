@@ -47,12 +47,13 @@ import PlusVendus from './views/PlusVendus.vue';
 const authMiddleware = (to, from, next) => {
     const isAuthenticated = localStorage.getItem('isLoggedIn')
     const userRole = localStorage.getItem("RoleUser")
+    const redirect_url = localStorage.getItem("/dashboard")
 
     if (!isAuthenticated) {
         // redirect the user to the login page if they are not authenticated
         next({ path: '/login' })
     } else if (userRole === 'Admin') {
-        if (to.path === '/dashboard') {
+        if (to.path === (window.location.href = redirect_url)) { 
             // if the user is already on the dashboard route, allow access without redirecting
             next()
         } else {

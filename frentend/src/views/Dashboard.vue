@@ -99,12 +99,15 @@ export default {
     methods: {
 
         logout() {
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('isLoggedIn')
-            localStorage.removeItem('user_id')
-            localStorage.removeItem('RoleUser')
-            this.isAuthenticated = false
-            this.$router.push('/Login')
+            // localStorage.removeItem('access_token')
+            // localStorage.removeItem('isLoggedIn')
+            // localStorage.removeItem('user_id')
+            // localStorage.removeItem('RoleUser')
+            // this.$router.push('/Login')
+            localStorage.clear()
+            this.$emit('logout')
+            this.$router.push('/login');
+            
         }
 
     }
