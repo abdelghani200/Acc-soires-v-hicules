@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar v-if="!isAdminLoggedIn" />
-    <Dashboard v-if="isAdminLoggedIn" />
+    <Dashboard v-if="isAdminLoggedIn"  @logout="onLogout"/>
     <div>
       <RouterView v-if="!isAdminLoggedIn" />
     </div>
@@ -31,6 +31,11 @@ export default {
   },
   created() {
     this.isAdminLoggedIn = localStorage.getItem('RoleUser') === 'Admin';
+  },
+  methods: {
+    onLogout() {
+      this.isAdminLoggedIn = false;
+    }
   }
 }
 
