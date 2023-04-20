@@ -1,7 +1,7 @@
 <template>
     <div class="col-lg-12 grid-margin stretch-card">
         <h4 class="card-title"> <span></span> Add_Products</h4>
-        <form class="user" action="">
+        <form class="user" action=""  enctype="multipart/form-data">
             <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
                     <input v-model="name" type="text" class="form-control form-control-user" placeholder="Name Product">
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input v-model="description" type="email" class="form-control form-control-user" placeholder="Description">
+                <input v-model="description" type="text" class="form-control form-control-user" placeholder="Description">
             </div>
             <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
@@ -42,7 +42,7 @@
                         id="exampleRepeatPassword" placeholder="discount">
                 </div>
                 <div class="col-sm-6">
-                    <input type="file" class="form-control form-control-user" placeholder="Image" @change="onFileSelected">
+                    <input type="file" class="form-control form-control-user" placeholder="Image" @change="uploadimage">
                 </div>
             </div>
             <a href="#" class="btn btn-primary" @click.prevent="addProduct">Ajouter un produit</a>
@@ -120,7 +120,24 @@ export default {
                 .catch(error => {
                     console.log(error)
                 })
+        },
+        uploadimage(event) {
+            this.loading = true;
+            let file = event.target.files[0];
+            let formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'tduoyf0g');
+            axios.post('https://api.cloudinary.com/v1_1/dnlsbze2k/upload', formData, {
+                withCredentials: false,
+                
+            })
+                .then(response => {
+                    // this.loading = false;
+                    this.image = response.data.secure_url;
+                    console.log(this.image)
+                })
         }
+
 
     },
     mounted() {
