@@ -6,29 +6,39 @@
                     <img src="../../../public/1.png" alt="Logo" class="img-fluid mb-3">
                     <ul class="nav flex-column">
 
-                        <li class="nav-item">
-                            <RouterLink class="nav-link" active-class="active" to="/statiques"><i class="fas fa-chart-line"
+                        <li class="nav-item dropdown">
+                            <router-link to="/statiques" class="nav-link" active-class="active"><i class="fas fa-chart-line"
                                     style="color: gray;"></i>
-                                Dashboard</RouterLink>
+                                Dashboard</router-link>
                         </li>
-                        <li class="nav-item">
-                            <RouterLink to="/order" class="nav-link" active-class="active"><i class="fas fa-clipboard-list"
+                        <li class="nav-item dropdown">
+                            <router-link to="/order" class="nav-link" active-class="active"><i class="fas fa-clipboard-list"
                                     style="color: gray;"></i>
-                                Orders</RouterLink>
+                                Orders</router-link>
                         </li>
-                        <li class="nav-item">
-                            <RouterLink class="nav-link" to="/produits"><i class="fas fa-box" style="color: gray;"></i>
-                                Products</RouterLink>
-                            <RouterLink class="nav-link" to="/add"><i class="fas fa-box" style="color: gray;"></i>
-                                AddProduct</RouterLink>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-box"></i>
+                                Products
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <router-link to="/produits" class="dropdown-item">List Products</router-link>
+                                <router-link to="/add" class="dropdown-item">Add Product</router-link>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <RouterLink class="nav-link" to="/DisplayCategories"><i class="fas fa-tags"
-                                    style="color: gray;"></i> Categories</RouterLink>
-                            <RouterLink class="nav-link" to="/addCategorie"><i class="fas fa-tags"
-                                    style="color: gray;"></i> AddCategorie</RouterLink>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-tags"></i>
+                                Categories
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <router-link to="/DisplayCategories" class="dropdown-item">List Categories</router-link>
+                                <router-link to="/addCategorie" class="dropdown-item">Add Categorie</router-link>
+                            </div>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item dropdown">
                             <RouterLink class="nav-link" to="/clients"><i class="fas fa-users" style="color: gray;"></i>
                                 Clients</RouterLink>
                         </li>
@@ -46,10 +56,10 @@
                             <i class="fa-solid fa-user"></i> Admin
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Settings</a>
+                            <!-- <a class="dropdown-item" href="#">Profile</a>
+                            <a class="dropdown-item" href="#">Settings</a> -->
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" href="#" @click.prevent="logout">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -82,10 +92,24 @@ export default {
     data() {
 
         return {
-            
+
         };
     },
+
+    methods: {
+
+        logout() {
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('isLoggedIn')
+            localStorage.removeItem('user_id')
+            localStorage.removeItem('RoleUser')
+            this.isAuthenticated = false
+            this.$router.push('/Login')
+        }
+
+    }
 
 }
 
 </script>
+
