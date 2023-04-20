@@ -1,36 +1,37 @@
 <template>
   <div>
-    <!-- <Navbar /> -->
-    <!-- <RouterView /> -->
-    <Dashboard/>
-    <!-- <add/> -->
-    <!-- <Update/> -->
-    <!-- <Footer/> -->
+    <Navbar v-if="!isAdminLoggedIn" />
+    <Dashboard v-if="isAdminLoggedIn" />
+    <div>
+      <RouterView v-if="!isAdminLoggedIn" />
+    </div>
+    <Footer />
   </div>
 </template>
 
 <script>
-// import { RouterView } from 'vue-router';
+
+import { RouterView } from 'vue-router';
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
-import Product from './components/Product.vue';
 import Dashboard from './views/Dashboard.vue';
-
-
-
 
 export default {
   name: 'App',
   components: {
     Navbar,
-    Footer,
-    Product,
     Dashboard,
-    
+    RouterView,
+    Footer,
+  },
+  data() {
+    return {
+      isAdminLoggedIn: false
+    }
+  },
+  created() {
+    this.isAdminLoggedIn = localStorage.getItem('RoleUser') === 'Admin';
+  }
 }
-}
-</script>
 
-<style>
-/* styles pour le composant App.vue */
-</style>
+</script>
