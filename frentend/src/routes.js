@@ -37,6 +37,37 @@ import add from './components/Admin/produits/add.vue';
 import BlogVue from './views/BlogVue.vue';
 
 
+import achats from './components/Admin/produits/achats.vue';
+
+
+import Contact from './views/Contact.vue';
+
+import PlusVendus from './views/PlusVendus.vue';
+
+const authMiddleware = (to, from, next) => {
+    const isAuthenticated = localStorage.getItem('isLoggedIn')
+    const userRole = localStorage.getItem("RoleUser")
+
+    if (!isAuthenticated) {
+        // redirect the user to the login page if they are not authenticated
+        next({ path: '/login' })
+    } else if (userRole === 'Admin') {
+        if (to.path === '/dashboard') {
+            // if the user is already on the dashboard route, allow access without redirecting
+            next()
+        } else {
+            // redirect the user to the dashboard page if they are an admin
+            next({ path: '/dashboard' })
+        }
+    } else {
+        // allow the user to access the route
+        next()
+    }
+}
+
+
+
+
 const routes = [
     {
         path: '',
@@ -53,6 +84,7 @@ const routes = [
     {
         path: '/dashboard',
         component: Dashboard,
+        beforeEnter: authMiddleware
     },
     {
         path: '/Cart',
@@ -61,10 +93,12 @@ const routes = [
     {
         path: '/AddCategorie',
         component: AddCategorie,
+        // beforeEnter: authMiddleware
     },
     {
         path: '/order',
         component: order,
+        // beforeEnter: authMiddleware
     },
     {
         path: '/produits',
@@ -77,15 +111,23 @@ const routes = [
     {
         path: '/details/:id',
         component: DetailProduct,
-        name: 'DetailProduct', 
+        name: 'DetailProduct',
+    },
+    {
+        path: '/achats/:id',
+        component: achats,
+        name: 'achats',
+        // beforeEnter: authMiddleware
     },
     {
         path: '/DisplayCategories',
-        component: DisplayCategories
+        component: DisplayCategories,
+        // beforeEnter: authMiddleware
     },
     {
         path: '/statiques',
-        component: Statiques
+        component: Statiques,
+        // beforeEnter: authMiddleware
     },
     {
         path: '/ProduitsVue',
@@ -96,28 +138,42 @@ const routes = [
         component: BlogVue,
     },
     {
+        path: '/Contact',
+        component: Contact,
+    },
+    {
+        path: '/PlusVendus',
+        component: PlusVendus
+    },
+    {
         path: '/clients',
         component: ClientsVue
     },
-    { path: '/updateProduct/:id',
-     component: update,
-     name: 'updateProduct' ,
-     props: route => ({ id: route.params.id }),
+    {
+        path: '/updateProduct/:id',
+        component: update,
+        name: 'updateProduct',
+        props: route => ({ id: route.params.id }),
+        // beforeEnter: authMiddleware
     },
     {
         path: '/UpdateCategorie/:id',
         component: UpdateCategorie,
         name: 'UpdateCategorie',
         props: route => ({ id: route.params.id }),
+        // beforeEnter: authMiddleware
     },
     {
         path: '/add',
         component: add,
+        // beforeEnter: authMiddleware
     },
-    { 
+    {
         path: '/addCategorie',
         component: AddCategorie,
-    }
+        // beforeEnter: authMiddleware
+    },
+
 
 ]
 
