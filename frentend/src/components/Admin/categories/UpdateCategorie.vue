@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="file" class="form-control form-control-user" id="image" @change="onImageChange">
+                <input type="file" class="form-control form-control-user" id="image" @change="uploadImage">
             </div>
             <div class="form-group">
                 <div class="col-sm-6 mb-3 mb-sm-0">
@@ -23,17 +23,15 @@
         </form>
     </div>
 </template>
-
 <script>
 import axios from 'axios'
-
 
 export default {
 
     data() {
         return {
-            category: { name: '', description: '' },
-            image: null
+            category: { name: '', description: '', image: null },
+            // image: null
         }
     },
 
@@ -44,29 +42,45 @@ export default {
         }
     },
     mounted() {
-        this.getCategories()
+        this.getCategory()
     },
 
     methods: {
 
-        getCategories() {
-
+        getCategory() {
             axios.get(`api/categories/${this.id}`)
                 .then(response => {
                     this.category = response.data
-                    console.log(this.category);
-                }).catch(error => {
+                    this.category.image = response.data.image;
+                    console.log(this.category.image);
+                })
+                .catch(error => {
                     console.log(error)
                 })
-
         },
-        onImageChange(event) {
-            this.image = event.target.files[0];
+
+        uploadImage(event) {
+            this.loading = true;
+            let file = event.target.files[0];
+            let formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'tduoyf0g');
+            axios.post('https://api.cloudinary.com/v1_1/dnlsbze2k/upload', formData, {
+                withCredentials: false,
+            })
+                .then(response => {
+                    // this.loading = false;
+                    this.category.image = response.data.secure_url;
+                    console.log(this.category.image)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         },
 
         updateCategory() {
             const categoryId = this.$route.params.id;
-            axios.put(`api/categories/${categoryId}`, this.category)
+            axios.put(`api/categories/${categoryId}`, { ...this.category, image: this.category.image })
                 .then(response => {
                     console.log(response.data);
                     this.$router.push('/DisplayCategories')
@@ -78,6 +92,3 @@ export default {
     }
 }
 </script>
-  
-  
-  
