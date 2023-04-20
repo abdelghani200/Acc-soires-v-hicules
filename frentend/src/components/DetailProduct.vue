@@ -3,7 +3,8 @@
         <div class="row">
             <div class="col-md-6" style="margin-top: 115px;">
                 <!-- <img src="https://placehold.it/500x500" class="img-fluid" alt="Product Image"> -->
-                <!-- <img :src="product.image" class="img-fluid" alt="Product Image"> -->
+                <img :src="product.image" class="img-fluid" alt="Product Image" style="    width: 500px;
+    height: 500px;">
             </div>
             <div class="col-md-6" style="margin-top: 115px;">
                 <h1 class="h3 mb-3">{{ product.name }}</h1>
@@ -45,21 +46,66 @@
                 </div>
             </div>
         </div>
+
+        <!-- Comment section -->
+        <div class="mb-3">
+            <h4 class="mb-3">Leave a review</h4>
+            <form>
+                <div class="mb-3">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" v-model="userName">
+                </div>
+                <div class="mb-3">
+                    <label for="rating">Rating:</label>
+                    <select class="form-control" id="rating" v-model="userRating">
+                        <option value="" disabled>Select rating</option>
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Star</option>
+                        <option value="3">3 Star</option>
+                        <option value="4">4 Star</option>
+                        <option value="5">5 Star</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" id="comment" rows="3" v-model="userComment"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" @click.prevent="addReview">Submit</button>
+            </form>
+
+            <!-- Display comments and ratings -->
+            <div class="mt-5">
+                <h4 class="mb-3">Customer Reviews</h4>
+                <div v-for="(review, index) in reviews" :key="index" class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-bold">{{ review.customer }}</span>
+                        <span class="text-muted">{{ review.created_at_formatted }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-warning">
+                            <template v-for="i in review.star">
+                                <i class="fa-solid fa-star"></i>
+                            </template>
+                        </span>
+                    </div>
+                    <p>{{ review.body }}</p>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <!-- <div v-else>
-        v-if="product"
-        <p>Loading...</p>
-    </div> -->
 </template>
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
     name: 'DetailProduct',
     data() {
         return {
             product: [],
+            reviews: [],
             quantity: 1,
         };
     },
@@ -72,9 +118,12 @@ export default {
         } catch (error) {
             console.log(error);
         }
+
+        this.getReviews();
+
     },
     methods: {
-        
+
         addToCart() {
             const productId = this.$route.params.id;
             axios.post('api/addToCart', {
@@ -94,6 +143,40 @@ export default {
                     console.log(error);
                 });
         },
+
+        addReview()
+        {
+            const productId = this.$route.params.id;
+
+            axios.post(`api/products/${productId}/reviews`,{
+                customer: this.userName,
+                star: this.userRating,
+                review: this.userComment,
+            })
+                .then((response) => {
+                    console.log(response.data);
+                    this.getReviews();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+
+        getReviews() {
+            const productId = this.$route.params.id;
+
+            axios.get(`api/products/${productId}/reviews`)
+                .then((response) => {
+                    this.reviews = response.data.data.map((review) => {
+                        review.created_at_formatted = moment(review.created_at).format('YYYY-MM-DD HH:mm:ss');
+                        return review;
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
 
 
     },
