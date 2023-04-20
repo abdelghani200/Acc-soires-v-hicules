@@ -266,7 +266,7 @@
     }
     .nav-link {
         padding: .4rem 0px;
-        color: #fff;
+        /* color: #fff; */
     }
     .lang_box {
         background-color: transparent;
@@ -395,7 +395,7 @@
     }
     .nav-link {
         padding: .4rem 0px;
-        color: #fff;
+        /* color: #fff; */
     }
     .lang_box {
         background-color: transparent;
