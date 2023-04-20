@@ -39,7 +39,5 @@
             </div>
         </div>
         <hr>
-    <p><strong>Adresse :</strong> 123 rue des Accessoires, 75000 Paris</p>
-    <p><strong>Téléphone :</strong> 01 23 45 67 89</p>
-    <p><strong>Email :</strong> contact@monsiteecommerce.com</p>
-</div></template>
+    </div>
+</template>
