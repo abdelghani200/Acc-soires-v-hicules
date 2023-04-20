@@ -16,7 +16,8 @@
                   <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                       <p class="mb-1">Shopping cart</p>
-                      <p class="mb-0">You have {{ number_product }} items in your cart</p>
+                      <p class="mb-0">You have {{cartItems.length}} items in your
+                        cart</p>
                     </div>
                     <div>
                       <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!" class="text-body">price <i
@@ -40,39 +41,20 @@
                         </div>
                         <div class="d-flex flex-row align-items-center">
                           <div style="width: 80px;">
-                            <h5 class="mb-0">{{ item.price }}</h5>
+                            <h5 class="mb-0">{{ item.quantity * item.price }}</h5>
                           </div>
-                          <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                          <a href="#!" style="color: #cecece;" @click="removeItem(item.id)"><i
+                              class="fas fa-trash-alt"></i></a>
                         </div>
                       </div>
                     </div>
                   </div>
-
-
-
-
                 </div>
-                <!-- <div class="col-lg-5">
+                <div class="col-lg-5">
 
                   <div class="card bg-primary text-white rounded-3">
                     <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="mb-0">Card details</h5>
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" class="img-fluid rounded-3"
-                          style="width: 45px;" alt="Avatar">
-                      </div>
 
-                      <p class="small mb-2">Card type</p>
-                      <div class="d-flex">
-                        <a href="#!" type="submit" class="text-white" style="margin-right: 5px;"><i
-                            class="fab fa-cc-mastercard fa-3x"></i></a>
-                        <a href="#!" type="submit" class="text-white" style="margin-right: 5px;"><i
-                            class="fab fa-cc-visa fa-3x"></i></a>
-                        <a href="#!" type="submit" class="text-white" style="margin-right: 5px;"><i
-                            class="fab fa-cc-amex fa-3x"></i></a>
-                        <a href="#!" type="submit" class="text-white" style="margin-right: 5px;">
-                          <i class="fab fa-cc-paypal fa-3x"></i></a>
-                      </div>
 
                       <form class="mt-4">
                         <div class="form-outline form-white mb-4">
@@ -110,30 +92,30 @@
 
                       <div class="d-flex justify-content-between">
                         <p class="mb-2">Subtotal</p>
-                        <p class="mb-2">$4798.00</p>
+                        <p class="mb-2">${{ subtotal }}</p>
                       </div>
 
                       <div class="d-flex justify-content-between">
                         <p class="mb-2">Shipping</p>
-                        <p class="mb-2">$20.00</p>
+                        <p class="mb-2">${{ shipping }}</p>
                       </div>
 
                       <div class="d-flex justify-content-between mb-4">
                         <p class="mb-2">Total(Incl. taxes)</p>
-                        <p class="mb-2">$4818.00</p>
+                        <p class="mb-2">${{ getTotal() }}</p>
                       </div>
 
                       <button type="button" class="btn btn-info btn-block btn-lg">
                         <div class="d-flex justify-content-between">
-                          <span>$4818.00</span>
-                          <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                          <span>${{ getTotal() }}</span>
+                          <span @click.prevent="checkout">Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                         </div>
                       </button>
 
                     </div>
                   </div>
 
-                </div> -->
+                </div>
 
               </div>
 
@@ -150,6 +132,7 @@
 <script>
 
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   name: "Cart",
@@ -157,10 +140,14 @@ export default {
 
   data() {
     return {
-      cartItems: []
+      cartItems: [],
+      subtotal: 0,
+      shipping: 0,
+      total: this.subtotal,
 
     }
   },
+
   methods: {
     async getCart() {
       try {
@@ -176,11 +163,138 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    updateQuantity(item) {
+      // Envoyer une requête PUT à l'API pour mettre à jour la quantité du produit
+      axios.put(`/api/cart/${item.id}`, { quantity: item.quantity })
+        .then(response => {
+          // Afficher un message de succès
+          console.log(response.data.message);
+        })
+        .catch(error => {
+          // Afficher un message d'erreur
+          console.error(error.response.data.message);
+        });
+    },
+    removeItem(item) {
+      // Envoyer une requête DELETE à l'API pour supprimer le produit du panier
+      axios.delete(`api/cart/${item}`)
+        .then(response => {
+          // Afficher un message de succès
+          console.log(response.data.message);
+          // Mettre à jour la liste des produits du panier
+          this.getCart();
+        })
+        .catch(error => {
+          // Afficher un message d'erreur
+          console.error(error.response.data.message);
+        });
+    },
+
+    computeTotals() {
+      let subtotal = 0;
+      this.cartItems.forEach((item) => {
+        subtotal += item.price * item.quantity;
+      });
+      console.log(subtotal);
+      this.subtotal = subtotal;
+      console.log(1);
+      console.log(this.subtotal);
+      this.shipping = 10; // Assuming a fixed shipping cost of $10
+      this.total = this.subtotal + this.shipping;
+      console.log(this.total);
+    },
+
+    getTotal() {
+      let total = 0;
+      for (let i = 0; i < this.cartItems.length; i++) {
+        total += this.cartItems[i].price * this.cartItems[i].quantity;
+      }
+      return total;
+    },
+
+
+    checkout() {
+    // Vider la table carts
+    axios.delete('api/cart', {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
+    })
+      .then(response => {
+        console.log('Carts table cleared')
+        console.log(this.cartItems)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+
+    // Ajouter la commande à la table orders
+
+      const userId = localStorage.getItem('user_id');
+      console.log('CArtgbsdfv');
+      console.log(this.cartItems);
+      
+      console.log(this.cartItems);
+      const total = this.getTotal();
+      const statut = "pending";
+
+      const order = {
+        user_id: userId,
+        //  "items" : items,
+
+        items: this.cartItems.map(item => {
+          return {
+            product_id: item.id,
+            quantite: item.quantity
+          }
+        }),
+
+        total: total,
+        statut: statut
+      };
+
+      // console.log(JSON.stringify(order));
+
+      axios.post('/api/orders', JSON.stringify(order), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          console.log(order);
+          console.log('Order created')
+          // console.log(cartItems)
+        })
+        .catch(error => {
+          console.error(error)
+        });
+
+      // Afficher une alerte de succès
+      Swal.fire({
+        title: 'Commande réussie!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+    }
+
+
+  },
+  computed: {
+    subtotal() {
+      let total = 0;
+      this.cartItems.forEach(item => {
+        total += item.price * item.quantity;
+      });
+      return total;
     }
   },
 
   mounted() {
     this.getCart()
+    this.computeTotals()
+    this.getTotal()
+
   }
 
 
