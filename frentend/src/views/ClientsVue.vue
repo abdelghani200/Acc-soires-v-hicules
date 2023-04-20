@@ -9,6 +9,9 @@
                             <th> # </th>
                             <th> Name </th>
                             <th> Email </th>
+                            <th> Ville </th>
+                            <th> Adress </th>
+                            <th> Telephone </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -16,6 +19,9 @@
                             <td> {{ user.id }} </td>
                             <td> {{ user.name }} </td>
                             <td> {{ user.email }} </td>
+                            <td> {{ user.ville }} </td>
+                            <td> {{ user.address }} </td>
+                            <td> {{ user.numTele }} </td>
                         </tr>
                     </tbody>
                 </table>
