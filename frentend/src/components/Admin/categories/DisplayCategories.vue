@@ -18,11 +18,9 @@
                             <td> {{ categorie.id }} </td>
                             <td> {{ categorie.name }} </td>
                             <td>
-                                <!-- <img v-bind:src=" categorie.image "> -->
                                 <img class="rounded-circle" style="width: 50px; height: 50px;" :src="categorie.image" />
-                                <!-- <img :src="'/storage/images/categories/' + categorie.image" alt="{{ categorie.name }}"> -->
                             </td>
-                            <td> {{ categorie.description }} </td>
+                            <td> {{ categorie.description.slice(0, 25) + '...' }} </td>
                             <td class="d-flex">
                                 <button @click="deleteCategorie(categorie.id)" class="btn btn-danger"
                                     style="margin-right: 6px;"><i class="fa-sharp fa-solid fa-trash"></i></button>
@@ -40,6 +38,7 @@
 <script>
 
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -71,6 +70,16 @@ export default {
                         console.log(response);
                         console.log('Categorie deleted successfully');
                         this.getCategories();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Categorie delete successfully',
+                            text: 'Your Categorie has been deleted successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+
+                        })
+
                     })
                     .catch(error => {
                         console.log(error);
@@ -88,6 +97,16 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.getCategories();
+
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Categorie update successfully',
+                    //     text: 'Your Categorie has been updated successfully!',
+                    //     showConfirmButton: false,
+                    //     timer: 1500
+
+                    // })
+
                 })
                 .catch(error => {
                     console.log(error);
